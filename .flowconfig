@@ -1,0 +1,15 @@
+[ignore]
+.*/.vscode
+.*/node_modules
+.*/public
+
+[include]
+.*/src
+
+[libs]
+
+[lints]
+
+[options]
+
+[strict]
