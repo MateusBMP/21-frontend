@@ -1,8 +1,8 @@
-// import card1 from './playing-cards-1.svg';
+import * as React from 'react';
+import { Link } from 'react-router-dom';
+
 import card2 from './playing-cards-2.svg';
 import './Home.css';
-import React from 'react';
-import { Link } from 'react-router-dom';
 
 class App extends React.Component {
   render() {

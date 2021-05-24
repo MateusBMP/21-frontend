@@ -1,12 +1,23 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import Routes from './Routes';
 import reportWebVitals from './reportWebVitals';
+import { ToastProvider } from 'react-toast-notifications';
+import { Provider } from 'react-redux'
+
+import CustomToast from './components/toast';
+import store from './store/index';
+import Routes from './Routes';
+import './index.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Routes />
+    <Provider store={store}>
+      <ToastProvider components={{ Toast: CustomToast }} autoDismiss>
+        <Routes />
+      </ToastProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
