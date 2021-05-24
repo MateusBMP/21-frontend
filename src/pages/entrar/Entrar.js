@@ -125,15 +125,14 @@ class Entrar extends React.Component {
             <div className={classData}>
                 <h6 className="text-center fw-bold">Informe o código da sala:</h6>
                 <Cleave id="codigoDaSala" options={{blocks: [5], uppercase: true}} value={this.props.sala.codigo} onChange={(e) => this.props.salaSetCodigo(e.target.value)} placeholder="sala" className="form-control form-control-sm form-color-pink mt-2" />
-                { this._salaIsValid() ? (
-                    <div className="d-grip gap-2 mt-4">
+                <div className="d-grip gap-2 mt-4">
+                    { this._salaIsValid() ? (
                         <button type="button" className="btn btn-sm btn-outline-pink px-3 w-100" data-bs-target="#carouselEntrar" onClick={(e) => this.handleEntrarNaSala(e)}>entrar</button>
-                    </div>
-                ) : (
-                    <div className="d-grip gap-2 mt-4">
+                    ) : (
                         <button type="button" className="btn btn-sm btn-outline-pink px-3 w-100" disabled>entrar</button>
-                    </div>
-                )}
+                    )}
+                    <button type="button" className="btn btn-sm btn-outline-secondary px-3 w-100" data-bs-target="#carouselEntrar" onClick={(e) => this.handleChangeCarouselItemAtivo(0, e)}>voltar</button>
+                </div>
             </div>
         );
     }

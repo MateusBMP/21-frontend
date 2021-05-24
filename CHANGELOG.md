@@ -11,4 +11,4 @@ Seu formato é baseado no [Keep a Changelog](https://keepachangelog.com/en/1.0.0
 - Notificações via [React Toast Notifications](https://jossmac.github.io/react-toast-notifications/) adicionadas.
 - Tipagem via [Flow](https://flow.org/) adicionada.
 
-[Não publicado]: https://github.com/mateusbmp/blackjack-frontend
+[Não publicado]: https://github.com/mateusbmp/21-frontend
