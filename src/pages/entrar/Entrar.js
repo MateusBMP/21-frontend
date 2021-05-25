@@ -2,20 +2,15 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import Carousel from 'bootstrap/js/dist/carousel';
 import Cleave from 'cleave.js/react';
-import { useToasts } from 'react-toast-notifications';
 
+import { WithHistory } from '../../components/router';
+import { WithToasts } from '../../components/toast';
+import { nomeIsValid } from '../../helpers/jogador';
+import { codigoIsValid } from '../../helpers/sala';
 import { jogadorSetNome } from '../../store/actions/jogadorActions';
 import { salaSetCodigo } from '../../store/actions/salaActions';
-import { criarSala, buscarSala } from '../../service/sala';
+import { criarSala, buscarSala } from '../../service/salaService';
 import './Entrar.css';
-
-function WithToasts(Component) {
-    return function WrappedComponent(props) {
-        const toasts = useToasts();
-        return <Component {...props} {...toasts} />;
-    }
-}
-  
 
 class Entrar extends React.Component {
     static carousel = null;
@@ -50,14 +45,6 @@ class Entrar extends React.Component {
         this.carousel = null;
     }
 
-    _jogadorIsValid() {
-        return String(this.props.jogador.nome).length > 2;
-    }
-
-    _salaIsValid() {
-        return String(this.props.sala.codigo).length === 5;
-    }
-
     handleChangeCarouselItemAtivo(item, e) {
         e.preventDefault();
         this.carousel.to(item);
@@ -90,6 +77,11 @@ class Entrar extends React.Component {
 
     handleIrParaSala(sala, e) {
         this.handleChangeCarouselItemAtivo(2, e);
+
+        // Muda para a página da sala após um segundo
+        setTimeout(() => {
+            this.props.history.push(String('/sala/').concat(this.props.sala.codigo));
+        }, 1000);
     }
 
     _screenZero() {
@@ -101,7 +93,7 @@ class Entrar extends React.Component {
             <div className={classData}>
                 <h6 className="text-center fw-bold">Escolha um nome de jogador:</h6>
                 <Cleave id="nomeDoJogador" options={{blocks: [7]}} value={this.props.jogador.nome} onChange={(e) => this.props.jogadorSetNome(e.target.value)} placeholder="jogador" className="form-control form-control-sm form-color-pink mt-2" />
-                { this._jogadorIsValid() ? (
+                { nomeIsValid(this.props.jogador.nome) ? (
                     <div className="d-grip gap-2 mt-4">
                         <button type="button" className="btn btn-sm btn-outline-pink px-3 w-100" data-bs-target="#carouselEntrar" onClick={(e) => this.handleChangeCarouselItemAtivo(1, e)}>buscar sala</button>
                         <button type="button" className="btn btn-sm btn-outline-pink px-3 w-100" data-bs-target="#carouselEntrar" onClick={(e) => this.handleCriarSala(e)}>criar sala</button>
@@ -126,7 +118,7 @@ class Entrar extends React.Component {
                 <h6 className="text-center fw-bold">Informe o código da sala:</h6>
                 <Cleave id="codigoDaSala" options={{blocks: [5], uppercase: true}} value={this.props.sala.codigo} onChange={(e) => this.props.salaSetCodigo(e.target.value)} placeholder="sala" className="form-control form-control-sm form-color-pink mt-2" />
                 <div className="d-grip gap-2 mt-4">
-                    { this._salaIsValid() ? (
+                    { codigoIsValid(this.props.sala.codigo) ? (
                         <button type="button" className="btn btn-sm btn-outline-pink px-3 w-100" data-bs-target="#carouselEntrar" onClick={(e) => this.handleEntrarNaSala(e)}>entrar</button>
                     ) : (
                         <button type="button" className="btn btn-sm btn-outline-pink px-3 w-100" disabled>entrar</button>
@@ -174,4 +166,4 @@ const mapActionToProps = {
     salaSetCodigo
 };
 
-export default connect(mapStateToProps, mapActionToProps)(WithToasts(Entrar));
+export default connect(mapStateToProps, mapActionToProps)(WithHistory(WithToasts(Entrar)));

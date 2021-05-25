@@ -1,0 +1,17 @@
+.Sala-error {
+    font-family: var(--u-font-serif);
+}
+
+.Sala-header {
+    font-family: var(--u-font-serif);
+}
+
+.Sala-footer {
+    font-family: var(--u-font-serif);
+}
+
+.Sala-esperando .card {
+    width: 8rem;
+    height: 10rem;
+    font-family: var(--u-font-serif);
+}

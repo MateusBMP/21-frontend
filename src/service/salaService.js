@@ -1,5 +1,6 @@
 // @flow
-import { salaFlush, salaSetCodigo } from '../store/actions/salaActions';
+import { salaFlush, salaSetCodigo, salaAddJogador } from '../store/actions/salaActions';
+import { handleCriarSala } from './jogadorService';
 import store from '../store/index';
 
 /**
@@ -14,6 +15,12 @@ export const criarSala = (): boolean => {
 
     // Cria um código de sala aleatório
     store.dispatch(salaSetCodigo(_criarCodigoDeSala()));
+
+    // Notifica as operações referentes ao jogador
+    handleCriarSala();
+
+    // Adiciona o jogador na primeira posição na lista de jogadores da sala
+    store.dispatch(salaAddJogador(store.getState().jogadorReducer, 'um'));
 
     return true;
 };

@@ -5,6 +5,10 @@
     --u-font-serif: 'Roboto Slab', serif;
 }
 
+.fs-n1 {
+    font-size: .85rem !important
+}
+
 .btn-outline-pink {
     color: var(--u-pink);
     border-color: var(--u-pink);
@@ -23,4 +27,8 @@
 .form-control.form-color-pink:focus {
     border-color: var(--u-pink);
     box-shadow: 0 0 0 .2rem var(--u-dark-red-shadow);
+}
+
+.border-pink {
+    border-color: var(--u-pink);
 }

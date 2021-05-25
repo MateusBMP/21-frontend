@@ -1,16 +1,24 @@
 // @flow
-import { SALA_FLUSH, SALA_SET_CODIGO, SALA_ADD_JOGADOR } from '../actions/types';
+import { SALA_FLUSH, SALA_SET_SITUACAO, SALA_SET_CODIGO, SALA_ADD_JOGADOR } from '../actions/types';
 import type { Action } from '../actions/types';
-import type { JogadorState } from './jogadorReducer'; 
+import type { Posicao, JogadorState } from './jogadorReducer';
+import { jogadorInitialState } from './jogadorReducer';
 
 type State = {
+    situacao: string,
     codigo: string,
-    jogadores: Array<JogadorState>
+    jogadores: { [Posicao]: JogadorState },
 };
 
 const initialState: State = {
+    situacao: String(""),
     codigo: String(""),
-    jogadores: [],
+    jogadores: {
+        um: jogadorInitialState,
+        dois: jogadorInitialState,
+        tres: jogadorInitialState,
+        quatro: jogadorInitialState
+    }
 };
 
 const salaReducer = (state: State = initialState, action: Action): State => {
@@ -18,10 +26,9 @@ const salaReducer = (state: State = initialState, action: Action): State => {
         case SALA_FLUSH:
             state = initialState;
             return state;
+        case SALA_SET_SITUACAO: return {...state, situacao: action.payload}
         case SALA_SET_CODIGO: return {...state, codigo: action.payload}
-        case SALA_ADD_JOGADOR:
-            state.jogadores.push(action.payload);
-            return state;
+        case SALA_ADD_JOGADOR: return {...state, jogadores: {...state.jogadores, [action.payload.posicao]: action.payload.jogador}};
         default:
             return state;
     }
