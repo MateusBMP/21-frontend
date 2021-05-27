@@ -1,16 +1,16 @@
 // @flow
-import { SALA_FLUSH, SALA_SET_SITUACAO, SALA_SET_CODIGO, SALA_ADD_JOGADOR } from '../actions/types';
+import { SERVIDOR_UPDATE_SALA, SALA_FLUSH, SALA_SET_SITUACAO, SALA_SET_CODIGO, SALA_ADD_JOGADOR } from '../actions/types';
 import type { Action } from '../actions/types';
 import type { Posicao, JogadorState } from './jogadorReducer';
 import { jogadorInitialState } from './jogadorReducer';
 
-type State = {
+export type SalaState = {
     situacao: string,
     codigo: string,
     jogadores: { [Posicao]: JogadorState },
 };
 
-const initialState: State = {
+const initialState: SalaState = {
     situacao: String(""),
     codigo: String(""),
     jogadores: {
@@ -21,8 +21,9 @@ const initialState: State = {
     }
 };
 
-const salaReducer = (state: State = initialState, action: Action): State => {
+const salaReducer = (state: SalaState = initialState, action: Action): SalaState => {
     switch (action.type) {
+        case SERVIDOR_UPDATE_SALA: return {...state, ...action.payload, jogadores: {...state.jogadores, ...action.payload.jogadores}}
         case SALA_FLUSH:
             state = initialState;
             return state;

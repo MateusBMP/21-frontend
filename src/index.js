@@ -6,7 +6,9 @@ import reportWebVitals from './reportWebVitals';
 import { ToastProvider } from 'react-toast-notifications';
 import { Provider } from 'react-redux'
 
+import SocketProvider from './providers/socketProvider';
 import CustomToast from './components/toast';
+import socketClient from './socketClient';
 import store from './store/index';
 import Routes from './Routes';
 import './index.css';
@@ -15,7 +17,9 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <ToastProvider components={{ Toast: CustomToast }} autoDismiss>
-        <Routes />
+        <SocketProvider socket={socketClient}>
+          <Routes />
+        </SocketProvider>
       </ToastProvider>
     </Provider>
   </React.StrictMode>,

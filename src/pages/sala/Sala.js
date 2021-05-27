@@ -7,13 +7,12 @@ import { identificadorIsValid, nomeIsValid } from '../../helpers/jogador';
 import { codigoIsValid } from '../../helpers/sala';
 import { jogadorToggleIniciar } from '../../store/actions/jogadorActions';
 import { salaSetCodigo } from '../../store/actions/salaActions';
+import socket, { conectarSalaEvent } from '../../socketClient';
 
 import CardJogador from './cardJogador/CardJogador';
 import './Sala.css';
 
 class Sala extends React.Component {
-    // Controla o tempo de carregamento
-    timerLoader;
 
     constructor(props) {
         super(props);
@@ -23,15 +22,18 @@ class Sala extends React.Component {
             jogadorEValido: true,
             salaEValida: true,
         };
-
-        // Atualiza o redux da sala com o codigo passado via url
-        this.props.salaSetCodigo(String(this.props.match.params.codigo));
     }
 
     componentDidMount() {
+        // Atualiza o redux da sala com o codigo passado via url
+        this.props.salaSetCodigo(String(this.props.match.params.codigo));
+
+        // Notifica o servidor da conexão do jogador
+        socket().send(conectarSalaEvent(String(this.props.match.params.codigo)));
+
         // Cria um temporizador que vai controlar o carregamento da página. Quando terminar de
         // carregar, vai fazer as devidas verificações
-        this.timerLoader = setTimeout(() => {
+        setTimeout(() => {
             // Se o identificador do jogador for inválido, notifica um erro e atualiza a
             // propriedade
             if (!identificadorIsValid(this.props.jogador.identificador)) {
@@ -52,7 +54,7 @@ class Sala extends React.Component {
             }
 
             this.setState({ carregando: false });
-        }, 1000);
+        }, 2000);
     }
 
     interfaceCarregando() {
@@ -82,10 +84,10 @@ class Sala extends React.Component {
         return (
             <section className="Sala-section position-absolute top-50 start-50 translate-middle container">
                 <div className="Sala-esperando row g-1">
-                    <CardJogador posicao='um' isCurrent={this.props.jogador.identificador === this.props.sala.jogadores.um.identificador} />
-                    <CardJogador posicao='dois' isCurrent={this.props.jogador.identificador === this.props.sala.jogadores.dois.identificador} />
-                    <CardJogador posicao='tres' isCurrent={this.props.jogador.identificador === this.props.sala.jogadores.tres.identificador} />
-                    <CardJogador posicao='quatro' isCurrent={this.props.jogador.identificador === this.props.sala.jogadores.quatro.identificador} />
+                    <CardJogador posicao='um' />
+                    <CardJogador posicao='dois' />
+                    <CardJogador posicao='tres' />
+                    <CardJogador posicao='quatro' />
                 </div>
             </section>
         )

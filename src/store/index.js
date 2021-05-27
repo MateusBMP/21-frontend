@@ -1,41 +1,42 @@
 import { createStore, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
 
-import { salaAddJogador } from './actions/salaActions';
+import { JOGADOR_TOGGLE_INICIAR } from './actions/types';
 import reducer from './reducers/index';
+import socket, { updateJogadorEvent } from '../socketClient';
 
 /**
- * Middleware que verifica se o jogador já se encontra na sala. Estando na sala, atualiza a
- * instância do jogador na sala.
+ * Middleware que manipula as operações no redux e, quando alguma em específico for executada,
+ * despacha uma nova operação, geralmente atualização do servidor
  */
-const AtualizarSalaAposAtualizarJogador = ({ getState, dispatch }) => next => action => {
+const HandleReduxUpdates = ({ getState, dispatch }) => next => action => {
     // Executa a ação
     const response = next(action);
 
-    // Se o comando for para um jogador, verifica se é necessário despachar uma atualização para a
-    // sala
-    if (String(response.type).includes("JOGADOR_")) {
-        // Pega o jogador
-        const jogador = getState().jogadorReducer;
-    
-        // Se o jogador tiver uma posição setada, despacha a ação de atualizar o jogador na sala
-        if (jogador.posicao !== null) {
-            dispatch(salaAddJogador(jogador, jogador.posicao));
-        }
+    // Pega o jogador
+    const jogador = getState().jogadorReducer;
 
+    switch (response.type) {
+        case JOGADOR_TOGGLE_INICIAR:
+            // Notifica a atualização do jogador ao servidor
+            socket().send(updateJogadorEvent(jogador));
+            break;
+
+        default:
+            break;
     }
 
     return response;
 }
 
 class Store {
-    static instance;
+    static instance: Store;
 
     constructor() {
-        return createStore(reducer, {}, applyMiddleware(ReduxThunk, AtualizarSalaAposAtualizarJogador));
+        return createStore(reducer, {}, applyMiddleware(ReduxThunk, HandleReduxUpdates));
     }
 
-    static getInstance() {
+    static getInstance(): Store {
         if (Store.instance === undefined) {
             Store.instance = new Store();
         }
@@ -44,4 +45,4 @@ class Store {
     }
 }
 
-export default Store.getInstance();
+export default (Store.getInstance(): Store);

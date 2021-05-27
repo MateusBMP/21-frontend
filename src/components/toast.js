@@ -1,7 +1,7 @@
 import { DefaultToast, useToasts } from 'react-toast-notifications';
 
 const MyCustomToast = ({ children, ...props }) => {
-    let newProps = {
+    const newProps = {
         ...props,
         placement: 'top-center',
     };

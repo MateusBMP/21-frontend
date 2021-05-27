@@ -1,5 +1,7 @@
 // @flow
 export type Type =
+    'SERVIDOR_UPDATE_JOGADOR' |
+    'SERVIDOR_UPDATE_SALA' |
     'JOGADOR_SET_IDENTIFICADOR' |
     'JOGADOR_SET_NOME' |
     'JOGADOR_TOGGLE_INICIAR' |
@@ -13,6 +15,12 @@ export type Action = {
     type: Type,
     payload: any,
 };
+
+/**
+ * General Actions
+ */
+export const SERVIDOR_UPDATE_JOGADOR = 'SERVIDOR_UPDATE_JOGADOR';
+export const SERVIDOR_UPDATE_SALA = 'SERVIDOR_UPDATE_SALA';
 
 /**
  * Jogador Actions 

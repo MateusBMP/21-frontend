@@ -1,5 +1,5 @@
 // @flow
-import { JOGADOR_SET_IDENTIFICADOR, JOGADOR_SET_NOME, JOGADOR_TOGGLE_INICIAR, JOGADOR_SET_POSICAO, JOGADOR_SET_ICONE } from '../actions/types';
+import { SERVIDOR_UPDATE_JOGADOR, JOGADOR_SET_IDENTIFICADOR, JOGADOR_SET_NOME, JOGADOR_TOGGLE_INICIAR, JOGADOR_SET_POSICAO, JOGADOR_SET_ICONE } from '../actions/types';
 import type { Action } from '../actions/types';
 
 export type Posicao = 'um' | 'dois' | 'tres' | 'quatro';
@@ -75,6 +75,7 @@ export const jogadorInitialState: JogadorState = {
 
 const jogadorReducer = (state: JogadorState = jogadorInitialState, action: Action): JogadorState => {
     switch (action.type) {
+        case SERVIDOR_UPDATE_JOGADOR: return {...state, ...action.payload};
         case JOGADOR_SET_IDENTIFICADOR: return {...state, identificador: action.payload};
         case JOGADOR_SET_NOME: return {...state, nome: action.payload};
         case JOGADOR_TOGGLE_INICIAR: return {...state, iniciar: !state.iniciar};

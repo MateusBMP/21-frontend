@@ -8,9 +8,24 @@ import './CardJogador.css';
 
 class CardJogador extends React.Component {
 
+    constructor(props) {
+        super(props);
+
+        this.handleToggleIniciar = this.handleToggleIniciar.bind(this);
+    }
+
+    handleToggleIniciar(e) {
+        e.preventDefault();
+
+        this.props.jogadorToggleIniciar();
+    }
+
     render() {
         // Pega o jogador selecionado na lista de jogadores da sala
         const jogador = this.props.sala.jogadores[this.props.posicao];
+
+        // Verifica se o jogador selecionado é o jogador conectado
+        const conectado = this.props.jogador.identificador === jogador.identificador;
 
         // Descobre se o jogador está ou não conectado com parâmetros válidos
         const isValid = identificadorIsValid(jogador.identificador) && nomeIsValid(jogador.nome);
@@ -32,11 +47,11 @@ class CardJogador extends React.Component {
 
         // Constrói, se for necessário, o botão para iniciar o jogo
         const iniciarButton = isValid ? 
-            jogador.iniciar ?
+            jogador.iniciar && conectado ?
                 (
-                    <button type="button" className="btn btn-sm btn-outline-pink px-3 mt-2" onClick={(e) => this.props.jogadorToggleIniciar()}>aguardar</button>
+                    <button type="button" className="btn btn-sm btn-outline-pink px-3 mt-2" onClick={(e) => this.handleToggleIniciar(e)}>aguardar</button>
                 ) : (
-                    <button type="button" className="btn btn-sm btn-outline-warning px-3 mt-2" onClick={(e) => this.props.jogadorToggleIniciar()}>iniciar</button>
+                    <button type="button" className="btn btn-sm btn-outline-warning px-3 mt-2" onClick={(e) => this.handleToggleIniciar(e)}>iniciar</button>
                 ) :
             null;
 
@@ -59,7 +74,7 @@ class CardJogador extends React.Component {
 
 export const mapStateToProps = state => ({
     ...state,
-    jogador: state.jogadorReduce,
+    jogador: state.jogadorReducer,
     sala: state.salaReducer
 });
 

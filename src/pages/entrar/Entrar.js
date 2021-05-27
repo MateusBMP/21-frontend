@@ -10,6 +10,7 @@ import { codigoIsValid } from '../../helpers/sala';
 import { jogadorSetNome } from '../../store/actions/jogadorActions';
 import { salaSetCodigo } from '../../store/actions/salaActions';
 import { criarSala, buscarSala } from '../../service/salaService';
+import socket, { updateJogadorEvent } from '../../socketClient';
 import './Entrar.css';
 
 class Entrar extends React.Component {
@@ -76,12 +77,23 @@ class Entrar extends React.Component {
     }
 
     handleIrParaSala(sala, e) {
+        // Se o jogador não estiver conectado, notifica um aviso e tenta reconectar
+        if (socket().ws.readyState !== 1) {
+            this.props.addToast("Você está offline!", { appearance: 'error' });
+            socket().connect();
+            return;
+        }
+
         this.handleChangeCarouselItemAtivo(2, e);
 
-        // Muda para a página da sala após um segundo
+        // Notifica o servidor da atualização do jogador
+        socket().send(updateJogadorEvent(this.props.jogador));
+
+        // Espera dois segundos antes de atualizar
         setTimeout(() => {
+            // Muda para a página da sala
             this.props.history.push(String('/sala/').concat(this.props.sala.codigo));
-        }, 1000);
+        }, 3000);
     }
 
     _screenZero() {
