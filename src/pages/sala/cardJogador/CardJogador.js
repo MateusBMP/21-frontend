@@ -46,13 +46,10 @@ class CardJogador extends React.Component {
             String("card border-2 shadow");
 
         // Constrói, se for necessário, o botão para iniciar o jogo
-        const iniciarButton = isValid ? 
-            jogador.iniciar && conectado ?
-                (
-                    <button type="button" className="btn btn-sm btn-outline-pink px-3 mt-2" onClick={(e) => this.handleToggleIniciar(e)}>aguardar</button>
-                ) : (
-                    <button type="button" className="btn btn-sm btn-outline-warning px-3 mt-2" onClick={(e) => this.handleToggleIniciar(e)}>iniciar</button>
-                ) :
+        const iniciarButton = isValid && conectado ? 
+            jogador.iniciar ?
+                ( <button type="button" className="btn btn-sm btn-outline-pink px-3 mt-2" onClick={(e) => this.handleToggleIniciar(e)}>aguardar</button> ) :
+                ( <button type="button" className="btn btn-sm btn-outline-warning px-3 mt-2" onClick={(e) => this.handleToggleIniciar(e)}>iniciar</button> ) :
             null;
 
         // Constrói, se for necessário, o ícone do jogador
