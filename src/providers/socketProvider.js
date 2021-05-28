@@ -5,7 +5,7 @@ import { WithToasts } from '../components/toast';
 const SocketProvider = (props) => {
     const { addToast } = props;
 
-    // Adiciona o método addToast ao socket
+    // Adiciona o método addToast e a propriedade mounted ao socket
     props.socket().addToast = addToast;
     props.socket().run();
 

@@ -14,6 +14,7 @@ class SocketClient {
     url: string;
     ws: WebSocket;
     addToast: Function;
+    reconnectInterval: ?IntervalID;
 
     constructor() {
         const env = ((process.env: any): {[string]: string});
@@ -21,6 +22,7 @@ class SocketClient {
 
         this.url = url;
         this.addToast = (a: string, b: Object) => {};
+        this.reconnectInterval = setInterval(this.connect.bind(this), 5000);
     }
 
     connect(): void {
@@ -36,9 +38,9 @@ class SocketClient {
         this.ws.onclose = event => {
             this.addToast("Você foi desconectado", { appearance: 'warning' });
             console.error({ type: 'WS_CLOSE', payload: event });
-            setTimeout(() => {
-                this.connect();
-            }, 5000);
+            // setTimeout(() => {
+            //     this.connect();
+            // }, 5000);
         }
         this.ws.onerror = event => {
             this.addToast("Ops! Um erro ocorreu. Veja o log para mais detalhes", { appearance: 'error' });
